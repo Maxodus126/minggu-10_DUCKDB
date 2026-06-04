@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SC-DATA Minggu 10 — Terminal Output</title>
+<style>
+:root {
+  --bg:#05070d;
+  --terminal:#0b0f17;
+  --terminal2:#0f172a;
+  --border:#1f2937;
+  --text:#d1d5db;
+  --muted:#64748b;
+  --green:#22c55e;
+  --yellow:#facc15;
+  --blue:#38bdf8;
+  --red:#ef4444;
+  --purple:#a78bfa;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  background:
+    radial-gradient(circle at top left, rgba(56,189,248,.15), transparent 32%),
+    radial-gradient(circle at top right, rgba(250,204,21,.12), transparent 26%),
+    var(--bg);
+  color:var(--text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+}
+.wrapper {
+  max-width:1280px;
+  margin:0 auto;
+  padding:24px;
+}
+.window {
+  border:1px solid #253247;
+  border-radius:16px;
+  overflow:hidden;
+  background:var(--terminal);
+  box-shadow:0 28px 90px rgba(0,0,0,.55);
+}
+.titlebar {
+  height:42px;
+  background:linear-gradient(180deg,#151b27,#0f172a);
+  border-bottom:1px solid #253247;
+  display:flex;
+  align-items:center;
+  padding:0 14px;
+  gap:10px;
+}
+.dot { width:12px; height:12px; border-radius:50%; }
+.red { background:#ff5f56; }
+.yellow { background:#ffbd2e; }
+.green { background:#27c93f; }
+.title {
+  margin-left:12px;
+  color:#cbd5e1;
+  font-size:13px;
+}
+.toolbar {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding:14px 18px;
+  border-bottom:1px solid #182235;
+  background:#0b1220;
+}
+.brand {
+  font-weight:800;
+  color:var(--yellow);
+}
+.meta {
+  color:var(--muted);
+  font-size:12px;
+}
+pre {
+  margin:0;
+  padding:20px;
+  overflow:auto;
+  white-space:pre;
+  line-height:1.5;
+  font-size:13px;
+  color:#d1d5db;
+  background:
+    linear-gradient(rgba(255,255,255,.018) 50%, transparent 50%) 0 0 / 100% 3rem,
+    var(--terminal);
+}
+.prompt { color:var(--yellow); }
+.kwd { color:var(--blue); }
+.ok { color:var(--green); }
+.warn { color:var(--yellow); }
+.err { color:var(--red); }
+.footer {
+  color:#64748b;
+  text-align:center;
+  padding:14px;
+  font-size:12px;
+}
+.copy-hint {
+  color:#94a3b8;
+  font-size:12px;
+}
+@media(max-width:700px) {
+  .wrapper { padding:10px; }
+  pre { font-size:11px; padding:14px; }
+  .toolbar { align-items:flex-start; flex-direction:column; }
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="window">
+    <div class="titlebar">
+      <span class="dot red"></span>
+      <span class="dot yellow"></span>
+      <span class="dot green"></span>
+      <span class="title">duckdb terminal — sc_data_m10.duckdb</span>
+    </div>
+    <div class="toolbar">
+      <div>
+        <div class="brand">SC-DATA Minggu 10 | Terminal Output</div>
+        <div class="meta">Data Pipeline Builder · DuckDB CLI Style</div>
+      </div>
+      <div class="copy-hint">Output siap screenshot / copy ke laporan</div>
+    </div>
+    <pre>SC-DATA MINGGU 10 - DATA PIPELINE BUILDER
+DuckDB Terminal Output Simulation
+Database: sc_data_m10.duckdb
+Generated: 2026-06-04 05:00:48
+
+┌───────────────────────────────────────────────────────────────┐
+│ duckdb&gt; CONNECT &#x27;sc_data_m10.duckdb&#x27;;                         │
+│ Connected to DuckDB database                                  │
+└───────────────────────────────────────────────────────────────┘
+
+duckdb&gt; .tables
+
+┌────┬──────────────┐
+│ No │ table_name   │
+├────┼──────────────┤
+│ 1  │ mahasiswa    │
+│ 2  │ dosen        │
+│ 3  │ mata_kuliah  │
+│ 4  │ krs          │
+│ 5  │ nilai        │
+│ 6  │ kehadiran    │
+│ 7  │ pipeline_log │
+└────┴──────────────┘
+
+duckdb&gt; SELECT status, COUNT(*) FROM pipeline_status GROUP BY status;
+
+┌─────────┬─────────────┐
+│ status  │ jumlah_file │
+├─────────┼─────────────┤
+│ SUCCESS │ 5           │
+│ WARNING │ 1           │
+│ FAILED  │ 0           │
+└─────────┴─────────────┘
+
+duckdb&gt; SELECT &#x27;total_baris_dimuat&#x27; AS metric, 116 AS value
+   ...&gt; UNION ALL
+   ...&gt; SELECT &#x27;total_pipeline_log&#x27;, 24;
+
+┌────────────────────┬───────┐
+│ metric             │ value │
+├────────────────────┼───────┤
+│ total_baris_dimuat │ 116   │
+│ total_pipeline_log │ 24    │
+└────────────────────┴───────┘
+
+duckdb&gt; SELECT * FROM status_pipeline_per_file;
+
+┌─────────────────┬─────────────┬─────────┬─────┬────────┬────────────────────────────────────────────┬────────────────────────────────────────────┐
+│ file            │ table       │ status  │ raw │ loaded │ warning/error                              │ transformasi                               │
+├─────────────────┼─────────────┼─────────┼─────┼────────┼────────────────────────────────────────────┼────────────────────────────────────────────┤
+│ mahasiswa.csv   │ mahasiswa   │ SUCCESS │ 30  │ 30     │ -                                          │ Email di-lowercase | 30 baris bersih ters… │
+│ dosen.csv       │ dosen       │ SUCCESS │ 5   │ 5      │ -                                          │ 5 baris bersih tersisa                     │
+│ mata_kuliah.csv │ mata_kuliah │ SUCCESS │ 6   │ 6      │ -                                          │ 6 baris bersih tersisa                     │
+│ krs.csv         │ krs         │ SUCCESS │ 20  │ 20     │ -                                          │ 20 baris bersih tersisa                    │
+│ nilai.csv       │ nilai       │ WARNING │ 20  │ 19     │ Missing value kolom &#x27;nilai_angka&#x27;: 1 bari… │ Hapus 1 baris nilai tidak valid | 19 bari… │
+│ kehadiran.csv   │ kehadiran   │ SUCCESS │ 36  │ 36     │ -                                          │ status_hadir dinormalisasi | 36 baris ber… │
+└─────────────────┴─────────────┴─────────┴─────┴────────┴────────────────────────────────────────────┴────────────────────────────────────────────┘
+
+duckdb&gt; SELECT COUNT(*) FROM setiap_tabel;
+
+┌────────────────────────────────────┬────────┐
+│ query                              │ output │
+├────────────────────────────────────┼────────┤
+│ SELECT COUNT(*) FROM mahasiswa;    │ 30     │
+│ SELECT COUNT(*) FROM dosen;        │ 5      │
+│ SELECT COUNT(*) FROM mata_kuliah;  │ 6      │
+│ SELECT COUNT(*) FROM krs;          │ 20     │
+│ SELECT COUNT(*) FROM nilai;        │ 19     │
+│ SELECT COUNT(*) FROM kehadiran;    │ 36     │
+│ SELECT COUNT(*) FROM pipeline_log; │ 24     │
+└────────────────────────────────────┴────────┘
+
+duckdb&gt; SELECT * FROM pipeline_log ORDER BY log_id;
+
+┌────┬─────────────────┬──────────────┬─────────┬────────────────────────────────────────────────────────┬──────┬─────────────────────┐
+│ id │ filename        │ tahap        │ status  │ pesan                                                  │ rows │ timestamp           │
+├────┼─────────────────┼──────────────┼─────────┼────────────────────────────────────────────────────────┼──────┼─────────────────────┤
+│ 1  │ mahasiswa.csv   │ ingest       │ SUCCESS │ Dibaca 30 baris                                        │ 30   │ 2026-06-04 05:00:48 │
+│ 2  │ mahasiswa.csv   │ validasi     │ SUCCESS │ Semua validasi lulus                                   │ 30   │ 2026-06-04 05:00:48 │
+│ 3  │ mahasiswa.csv   │ transformasi │ SUCCESS │ Email di-lowercase | 30 baris bersih tersisa           │ 30   │ 2026-06-04 05:00:48 │
+│ 4  │ mahasiswa.csv   │ load         │ SUCCESS │ Dimuat ke tabel &#x27;mahasiswa&#x27;                            │ 30   │ 2026-06-04 05:00:48 │
+│ 5  │ dosen.csv       │ ingest       │ SUCCESS │ Dibaca 5 baris                                         │ 5    │ 2026-06-04 05:00:48 │
+│ 6  │ dosen.csv       │ validasi     │ SUCCESS │ Semua validasi lulus                                   │ 5    │ 2026-06-04 05:00:48 │
+│ 7  │ dosen.csv       │ transformasi │ SUCCESS │ 5 baris bersih tersisa                                 │ 5    │ 2026-06-04 05:00:48 │
+│ 8  │ dosen.csv       │ load         │ SUCCESS │ Dimuat ke tabel &#x27;dosen&#x27;                                │ 5    │ 2026-06-04 05:00:48 │
+│ 9  │ mata_kuliah.csv │ ingest       │ SUCCESS │ Dibaca 6 baris                                         │ 6    │ 2026-06-04 05:00:48 │
+│ 10 │ mata_kuliah.csv │ validasi     │ SUCCESS │ Semua validasi lulus                                   │ 6    │ 2026-06-04 05:00:48 │
+│ 11 │ mata_kuliah.csv │ transformasi │ SUCCESS │ 6 baris bersih tersisa                                 │ 6    │ 2026-06-04 05:00:48 │
+│ 12 │ mata_kuliah.csv │ load         │ SUCCESS │ Dimuat ke tabel &#x27;mata_kuliah&#x27;                          │ 6    │ 2026-06-04 05:00:48 │
+│ 13 │ krs.csv         │ ingest       │ SUCCESS │ Dibaca 20 baris                                        │ 20   │ 2026-06-04 05:00:48 │
+│ 14 │ krs.csv         │ validasi     │ SUCCESS │ Semua validasi lulus                                   │ 20   │ 2026-06-04 05:00:48 │
+│ 15 │ krs.csv         │ transformasi │ SUCCESS │ 20 baris bersih tersisa                                │ 20   │ 2026-06-04 05:00:48 │
+│ 16 │ krs.csv         │ load         │ SUCCESS │ Dimuat ke tabel &#x27;krs&#x27;                                  │ 20   │ 2026-06-04 05:00:48 │
+│ 17 │ nilai.csv       │ ingest       │ SUCCESS │ Dibaca 20 baris                                        │ 20   │ 2026-06-04 05:00:48 │
+│ 18 │ nilai.csv       │ validasi     │ WARNING │ Missing value kolom &#x27;nilai_angka&#x27;: 1 baris | Missing … │ 20   │ 2026-06-04 05:00:48 │
+│ 19 │ nilai.csv       │ transformasi │ SUCCESS │ Hapus 1 baris nilai tidak valid | 19 baris bersih ter… │ 19   │ 2026-06-04 05:00:48 │
+│ 20 │ nilai.csv       │ load         │ SUCCESS │ Dimuat ke tabel &#x27;nilai&#x27;                                │ 19   │ 2026-06-04 05:00:48 │
+│ 21 │ kehadiran.csv   │ ingest       │ SUCCESS │ Dibaca 36 baris                                        │ 36   │ 2026-06-04 05:00:48 │
+│ 22 │ kehadiran.csv   │ validasi     │ SUCCESS │ Semua validasi lulus                                   │ 36   │ 2026-06-04 05:00:48 │
+│ 23 │ kehadiran.csv   │ transformasi │ SUCCESS │ status_hadir dinormalisasi | 36 baris bersih tersisa   │ 36   │ 2026-06-04 05:00:48 │
+│ 24 │ kehadiran.csv   │ load         │ SUCCESS │ Dimuat ke tabel &#x27;kehadiran&#x27;                            │ 36   │ 2026-06-04 05:00:48 │
+└────┴─────────────────┴──────────────┴─────────┴────────────────────────────────────────────────────────┴──────┴─────────────────────┘
+
+duckdb&gt; -- Output khusus transformasi nilai.csv
+duckdb&gt; SELECT COUNT(*) AS sebelum_transformasi FROM read_csv_auto(&#x27;nilai.csv&#x27;);
+
+┌──────────────────────┐
+│ sebelum_transformasi │
+├──────────────────────┤
+│ 20                   │
+└──────────────────────┘
+
+duckdb&gt; SELECT COUNT(*) AS sesudah_transformasi FROM nilai;
+
+┌──────────────────────┐
+│ sesudah_transformasi │
+├──────────────────────┤
+│ 19                   │
+└──────────────────────┘
+
+duckdb&gt; SELECT * FROM nilai_csv_before WHERE id_nilai = &#x27;NL020&#x27;;
+
+┌──────────┬─────────┬─────────┬─────────────┬─────────────┬──────────┬────────────────┐
+│ id_nilai │ nim     │ kode_mk │ nilai_angka │ nilai_huruf │ semester │ tahun_akademik │
+├──────────┼─────────┼─────────┼─────────────┼─────────────┼──────────┼────────────────┤
+│ NL020    │ 2301018 │ SBDM01  │ NULL        │ NULL        │ 5        │ 2025/2026      │
+└──────────┴─────────┴─────────┴─────────────┴─────────────┴──────────┴────────────────┘
+
+duckdb&gt; SELECT * FROM nilai WHERE id_nilai = &#x27;NL020&#x27;;
+
+┌──────────┐
+│ result   │
+├──────────┤
+│ 0 rows   │
+└──────────┘
+
+duckdb&gt; SELECT * FROM nilai LIMIT 20;
+
+┌──────────┬─────────┬─────────┬─────────────┬─────────────┬──────────┬────────────────┐
+│ id_nilai │ nim     │ kode_mk │ nilai_angka │ nilai_huruf │ semester │ tahun_akademik │
+├──────────┼─────────┼─────────┼─────────────┼─────────────┼──────────┼────────────────┤
+│ NL001    │ 2301001 │ SBDM01  │ 88.0        │ A           │ 5        │ 2025/2026      │
+│ NL002    │ 2301001 │ AIAR01  │ 92.0        │ A           │ 5        │ 2025/2026      │
+│ NL003    │ 2301002 │ SBDM01  │ 75.0        │ B+          │ 5        │ 2025/2026      │
+│ NL004    │ 2301002 │ DBMS02  │ 80.0        │ A-          │ 3        │ 2025/2026      │
+│ NL005    │ 2301003 │ AIAR01  │ 70.0        │ B           │ 5        │ 2025/2026      │
+│ NL006    │ 2301003 │ STAT01  │ 65.0        │ B-          │ 3        │ 2025/2026      │
+│ NL007    │ 2301004 │ SBDM01  │ 95.0        │ A           │ 5        │ 2025/2026      │
+│ NL008    │ 2301005 │ ALGO01  │ 55.0        │ C           │ 4        │ 2025/2026      │
+│ NL009    │ 2301007 │ DBMS02  │ 78.0        │ B+          │ 3        │ 2025/2026      │
+│ NL010    │ 2301008 │ AIAR01  │ 85.0        │ A-          │ 5        │ 2025/2026      │
+│ NL011    │ 2301009 │ STAT01  │ 90.0        │ A           │ 3        │ 2025/2026      │
+│ NL012    │ 2301010 │ SBDM01  │ 72.0        │ B           │ 5        │ 2025/2026      │
+│ NL013    │ 2301011 │ ALGO01  │ 40.0        │ D           │ 4        │ 2025/2026      │
+│ NL014    │ 2301012 │ SIAP01  │ 88.0        │ A           │ 4        │ 2025/2026      │
+│ NL015    │ 2301013 │ SBDM01  │ 91.0        │ A           │ 5        │ 2025/2026      │
+│ NL016    │ 2301014 │ AIAR01  │ 76.0        │ B+          │ 5        │ 2025/2026      │
+│ NL017    │ 2301015 │ DBMS02  │ 82.0        │ A-          │ 3        │ 2025/2026      │
+│ NL018    │ 2301016 │ STAT01  │ 67.0        │ B-          │ 3        │ 2025/2026      │
+│ NL019    │ 2301017 │ ALGO01  │ 58.0        │ C+          │ 4        │ 2025/2026      │
+└──────────┴─────────┴─────────┴─────────────┴─────────────┴──────────┴────────────────┘
+
+
+
+duckdb&gt; SELECT * FROM mahasiswa LIMIT 20;
+
+┌─────────┬────────────────┬──────────────────┬──────────┬──────────────────┬────────┐
+│ nim     │ nama           │ prodi            │ angkatan │ email            │ status │
+├─────────┼────────────────┼──────────────────┼──────────┼──────────────────┼────────┤
+│ 2301001 │ Andi Pratama   │ Informatika      │ 2023     │ andi@istn.ac.id  │ aktif  │
+│ 2301002 │ Budi Santoso   │ Informatika      │ 2023     │ budi@istn.ac.id  │ aktif  │
+│ 2301003 │ Citra Dewi     │ Sistem Informasi │ 2023     │ citra@istn.ac.id │ aktif  │
+│ 2301004 │ Dian Rahma     │ Informatika      │ 2023     │ dian@istn.ac.id  │ aktif  │
+│ 2301005 │ Eko Wahyu      │ Sistem Informasi │ 2023     │ eko@istn.ac.id   │ aktif  │
+│ 2301006 │ Fira Nabila    │ Informatika      │ 2023     │ fira@istn.ac.id  │ cuti   │
+│ 2301007 │ Gilang Putra   │ Sistem Informasi │ 2023     │ gilang@istn.ac.… │ aktif  │
+│ 2301008 │ Hana Safitri   │ Informatika      │ 2023     │ hana@istn.ac.id  │ aktif  │
+│ 2301009 │ Ivan Kurnia    │ Sistem Informasi │ 2023     │ ivan@istn.ac.id  │ aktif  │
+│ 2301010 │ Julia Wati     │ Informatika      │ 2023     │ julia@istn.ac.id │ aktif  │
+│ 2301011 │ Krisna Bayu    │ Sistem Informasi │ 2023     │ krisna@istn.ac.… │ aktif  │
+│ 2301012 │ Laila Sari     │ Informatika      │ 2023     │ laila@istn.ac.id │ aktif  │
+│ 2301013 │ Miko Andrian   │ Sistem Informasi │ 2023     │ miko@istn.ac.id  │ aktif  │
+│ 2301014 │ Nanda Putri    │ Informatika      │ 2023     │ nanda@istn.ac.id │ aktif  │
+│ 2301015 │ Omar Faruq     │ Sistem Informasi │ 2023     │ omar@istn.ac.id  │ aktif  │
+│ 2301016 │ Pita Lestari   │ Informatika      │ 2023     │ pita@istn.ac.id  │ aktif  │
+│ 2301017 │ Qori Amelia    │ Sistem Informasi │ 2023     │ qori@istn.ac.id  │ aktif  │
+│ 2301018 │ Rizky Aditya   │ Informatika      │ 2023     │ rizky@istn.ac.id │ aktif  │
+│ 2301019 │ Sinta Maharani │ Sistem Informasi │ 2023     │ sinta@istn.ac.id │ aktif  │
+│ 2301020 │ Tegar Susilo   │ Informatika      │ 2023     │ tegar@istn.ac.id │ aktif  │
+└─────────┴────────────────┴──────────────────┴──────────┴──────────────────┴────────┘
+
+
+duckdb&gt; SELECT * FROM dosen LIMIT 20;
+
+┌──────┬──────────────────┬──────────────────┬──────────────────┬───────────────┐
+│ nip  │ nama             │ prodi            │ email            │ jabatan       │
+├──────┼──────────────────┼──────────────────┼──────────────────┼───────────────┤
+│ D001 │ Dr. Oni Bibin B… │ Informatika      │ oni@istn.ac.id   │ Lektor Kepala │
+│ D002 │ Ashari Abidin M… │ Sistem Informasi │ ashari@istn.ac.… │ Lektor        │
+│ D003 │ Prof. Bambang H… │ Informatika      │ bambang@istn.ac… │ Guru Besar    │
+│ D004 │ Dr. Siti Rahayu  │ Sistem Informasi │ siti@istn.ac.id  │ Lektor        │
+│ D005 │ Ahmad Fauzi M.T  │ Informatika      │ ahmad@istn.ac.id │ Asisten Ahli  │
+└──────┴──────────────────┴──────────────────┴──────────────────┴───────────────┘
+
+
+duckdb&gt; SELECT * FROM mata_kuliah LIMIT 20;
+
+┌─────────┬──────────────────┬─────┬──────────┬──────────────────┬───────────┐
+│ kode_mk │ nama_mk          │ sks │ semester │ prodi            │ nip_dosen │
+├─────────┼──────────────────┼─────┼──────────┼──────────────────┼───────────┤
+│ SBDM01  │ Sistem Basis Da… │ 3   │ 5        │ Informatika      │ D001      │
+│ AIAR01  │ Arsitektur Data… │ 3   │ 5        │ Informatika      │ D002      │
+│ DBMS02  │ Manajemen Basis… │ 2   │ 3        │ Sistem Informasi │ D003      │
+│ STAT01  │ Statistika Tera… │ 2   │ 3        │ Informatika      │ D004      │
+│ ALGO01  │ Algoritma Lanjut │ 3   │ 4        │ Informatika      │ D005      │
+│ SIAP01  │ Sistem Informas… │ 2   │ 4        │ Sistem Informasi │ D002      │
+└─────────┴──────────────────┴─────┴──────────┴──────────────────┴───────────┘
+
+
+duckdb&gt; SELECT * FROM krs LIMIT 20;
+
+┌────────┬─────────┬─────────┬──────────┬────────────────┬────────┐
+│ id_krs │ nim     │ kode_mk │ semester │ tahun_akademik │ status │
+├────────┼─────────┼─────────┼──────────┼────────────────┼────────┤
+│ KRS001 │ 2301001 │ SBDM01  │ 5        │ 2025/2026      │ aktif  │
+│ KRS002 │ 2301001 │ AIAR01  │ 5        │ 2025/2026      │ aktif  │
+│ KRS003 │ 2301002 │ SBDM01  │ 5        │ 2025/2026      │ aktif  │
+│ KRS004 │ 2301002 │ DBMS02  │ 3        │ 2025/2026      │ aktif  │
+│ KRS005 │ 2301003 │ AIAR01  │ 5        │ 2025/2026      │ aktif  │
+│ KRS006 │ 2301003 │ STAT01  │ 3        │ 2025/2026      │ aktif  │
+│ KRS007 │ 2301004 │ SBDM01  │ 5        │ 2025/2026      │ aktif  │
+│ KRS008 │ 2301005 │ ALGO01  │ 4        │ 2025/2026      │ aktif  │
+│ KRS009 │ 2301006 │ SBDM01  │ 5        │ 2025/2026      │ cuti   │
+│ KRS010 │ 2301007 │ DBMS02  │ 3        │ 2025/2026      │ aktif  │
+│ KRS011 │ 2301008 │ AIAR01  │ 5        │ 2025/2026      │ aktif  │
+│ KRS012 │ 2301009 │ STAT01  │ 3        │ 2025/2026      │ aktif  │
+│ KRS013 │ 2301010 │ SBDM01  │ 5        │ 2025/2026      │ aktif  │
+│ KRS014 │ 2301011 │ ALGO01  │ 4        │ 2025/2026      │ aktif  │
+│ KRS015 │ 2301012 │ SIAP01  │ 4        │ 2025/2026      │ aktif  │
+│ KRS016 │ 2301013 │ SBDM01  │ 5        │ 2025/2026      │ aktif  │
+│ KRS017 │ 2301014 │ AIAR01  │ 5        │ 2025/2026      │ aktif  │
+│ KRS018 │ 2301015 │ DBMS02  │ 3        │ 2025/2026      │ aktif  │
+│ KRS019 │ 2301016 │ STAT01  │ 3        │ 2025/2026      │ aktif  │
+│ KRS020 │ 2301017 │ ALGO01  │ 4        │ 2025/2026      │ aktif  │
+└────────┴─────────┴─────────┴──────────┴────────────────┴────────┘
+
+
+duckdb&gt; SELECT * FROM nilai LIMIT 20;
+
+┌──────────┬─────────┬─────────┬─────────────┬─────────────┬──────────┬────────────────┐
+│ id_nilai │ nim     │ kode_mk │ nilai_angka │ nilai_huruf │ semester │ tahun_akademik │
+├──────────┼─────────┼─────────┼─────────────┼─────────────┼──────────┼────────────────┤
+│ NL001    │ 2301001 │ SBDM01  │ 88.0        │ A           │ 5        │ 2025/2026      │
+│ NL002    │ 2301001 │ AIAR01  │ 92.0        │ A           │ 5        │ 2025/2026      │
+│ NL003    │ 2301002 │ SBDM01  │ 75.0        │ B+          │ 5        │ 2025/2026      │
+│ NL004    │ 2301002 │ DBMS02  │ 80.0        │ A-          │ 3        │ 2025/2026      │
+│ NL005    │ 2301003 │ AIAR01  │ 70.0        │ B           │ 5        │ 2025/2026      │
+│ NL006    │ 2301003 │ STAT01  │ 65.0        │ B-          │ 3        │ 2025/2026      │
+│ NL007    │ 2301004 │ SBDM01  │ 95.0        │ A           │ 5        │ 2025/2026      │
+│ NL008    │ 2301005 │ ALGO01  │ 55.0        │ C           │ 4        │ 2025/2026      │
+│ NL009    │ 2301007 │ DBMS02  │ 78.0        │ B+          │ 3        │ 2025/2026      │
+│ NL010    │ 2301008 │ AIAR01  │ 85.0        │ A-          │ 5        │ 2025/2026      │
+│ NL011    │ 2301009 │ STAT01  │ 90.0        │ A           │ 3        │ 2025/2026      │
+│ NL012    │ 2301010 │ SBDM01  │ 72.0        │ B           │ 5        │ 2025/2026      │
+│ NL013    │ 2301011 │ ALGO01  │ 40.0        │ D           │ 4        │ 2025/2026      │
+│ NL014    │ 2301012 │ SIAP01  │ 88.0        │ A           │ 4        │ 2025/2026      │
+│ NL015    │ 2301013 │ SBDM01  │ 91.0        │ A           │ 5        │ 2025/2026      │
+│ NL016    │ 2301014 │ AIAR01  │ 76.0        │ B+          │ 5        │ 2025/2026      │
+│ NL017    │ 2301015 │ DBMS02  │ 82.0        │ A-          │ 3        │ 2025/2026      │
+│ NL018    │ 2301016 │ STAT01  │ 67.0        │ B-          │ 3        │ 2025/2026      │
+│ NL019    │ 2301017 │ ALGO01  │ 58.0        │ C+          │ 4        │ 2025/2026      │
+└──────────┴─────────┴─────────┴─────────────┴─────────────┴──────────┴────────────────┘
+
+
+duckdb&gt; SELECT * FROM kehadiran LIMIT 20;
+
+┌──────────┬─────────┬─────────┬──────────────────┬──────────────┐
+│ event_id │ nim     │ kode_mk │ waktu_event      │ status_hadir │
+├──────────┼─────────┼─────────┼──────────────────┼──────────────┤
+│ EVT001   │ 2301001 │ SBDM01  │ 2026-05-25 08:0… │ hadir        │
+│ EVT002   │ 2301002 │ SBDM01  │ 2026-05-25 08:0… │ hadir        │
+│ EVT003   │ 2301003 │ SBDM01  │ 2026-05-25 08:0… │ izin         │
+│ EVT004   │ 2301004 │ SBDM01  │ 2026-05-25 08:0… │ hadir        │
+│ EVT005   │ 2301005 │ SBDM01  │ 2026-05-25 08:0… │ sakit        │
+│ EVT006   │ 2301006 │ SBDM01  │ 2026-05-25 08:0… │ alfa         │
+│ EVT007   │ 2301007 │ SBDM01  │ 2026-05-25 08:0… │ hadir        │
+│ EVT008   │ 2301008 │ SBDM01  │ 2026-05-25 08:0… │ hadir        │
+│ EVT009   │ 2301009 │ SBDM01  │ 2026-05-25 08:0… │ izin         │
+│ EVT010   │ 2301010 │ SBDM01  │ 2026-05-25 08:0… │ hadir        │
+│ EVT011   │ 2301011 │ AIAR01  │ 2026-05-25 09:0… │ hadir        │
+│ EVT012   │ 2301012 │ AIAR01  │ 2026-05-25 09:0… │ hadir        │
+│ EVT013   │ 2301013 │ AIAR01  │ 2026-05-25 09:0… │ alfa         │
+│ EVT014   │ 2301014 │ AIAR01  │ 2026-05-25 09:0… │ hadir        │
+│ EVT015   │ 2301015 │ AIAR01  │ 2026-05-25 09:0… │ sakit        │
+│ EVT016   │ 2301016 │ AIAR01  │ 2026-05-25 09:0… │ hadir        │
+│ EVT017   │ 2301017 │ AIAR01  │ 2026-05-25 09:0… │ izin         │
+│ EVT018   │ 2301018 │ AIAR01  │ 2026-05-25 09:0… │ hadir        │
+│ EVT019   │ 2301019 │ AIAR01  │ 2026-05-25 09:0… │ hadir        │
+│ EVT020   │ 2301020 │ AIAR01  │ 2026-05-25 09:1… │ hadir        │
+└──────────┴─────────┴─────────┴──────────────────┴──────────────┘
+
+
+duckdb&gt; -- Narasi output untuk laporan
+
+Berdasarkan hasil eksekusi pipeline, seluruh file CSV berhasil diproses dan dimuat
+ke DuckDB. Dari enam file yang diproses, lima file memperoleh status SUCCESS,
+yaitu mahasiswa.csv, dosen.csv, mata_kuliah.csv, krs.csv, dan kehadiran.csv.
+Satu file memperoleh status WARNING, yaitu nilai.csv, karena terdapat missing value
+pada kolom nilai_angka dan nilai_huruf. Setelah proses transformasi, satu baris
+nilai yang tidak valid dihapus sehingga tabel nilai yang dimuat ke DuckDB berisi
+19 baris. Secara keseluruhan, pipeline berhasil memuat 116 baris data
+bersih ke dalam enam tabel utama dan mencatat 24 aktivitas proses pada
+pipeline_log.
+
+duckdb&gt; .exit
+</pre>
+  </div>
+  <div class="footer">SC-DATA · Minggu 10 — Data Pipeline Builder · Output terminal simulasi DuckDB</div>
+</div>
+</body>
+</html>
